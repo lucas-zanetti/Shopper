@@ -1,0 +1,37 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 30vmin;
+  pointer-events: none;
+}
+
+.App-header {
+  background-color: #FFF;
+  min-height: 10vh;
+  max-height: 20vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: #00003F;
+  font-family: sans-serif;
+  margin: 0 5vw;
+  padding: 0 5vw;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.App-form {
+  border: 1px solid #00003F;
+  margin: 10vh 10vw;
+  padding: 5vh 5vw;
+}
+
+.App-form-component {
+  margin: 10px;
+}
