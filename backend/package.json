@@ -1,0 +1,17 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Backend part of Shopper project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "type": "module",
+  "author": "Lucas Zanetti",
+  "license": "ISC",
+  "dependencies": {
+    "csv": "^6.3.3",
+    "mysql": "^2.18.1"
+  }
+}
