@@ -1,5 +1,5 @@
-import aux from './helpers/auxiliary.js';
-import constants from './helpers/constants.js';
+import aux from '../helpers/auxiliary.js';
+import constants from '../helpers/constants.js';
 
 export default {
     manageProductInfoBeforeUpdated: (rows, db) => manageProductInfoBeforeUpdated(rows, db),
@@ -32,28 +32,31 @@ function manageProductInfoBeforeUpdated(rows, db){
     let productsOnDbPromisse = checkProductsOnDatabase(validRows, db);
     let packedProductsPromisse = getProductsOnPacks(validRows, db);
   
-    Promise.all([productsOnDbPromisse, packedProductsPromisse])
-      .then(result =>{
-        if(result[0].length){
-          result[0].forEach(product => productsOnDatabase.push(product));
-        }
-        else {
-          console.log("There are no products matching product ids on database");
-        }
-        
-        productsOnPacks = result[1];
-  
-        validatedRows = handleProductsNotOnDatabase(validatedRows, productsOnDatabase);
-  
-        let productsManaged = { productsOnDatabase, productsOnPacks, validatedRows }
-        
-        addPacksToUpdate(productsManaged, db)
-          .then(result =>{
-            updatePrices(result, db);
-          })
-          .catch(err => console.log(err));
-      })
-      .catch(err => console.log(err));
+    return new Promise((resolve, reject) => {
+      Promise.all([productsOnDbPromisse, packedProductsPromisse])
+        .then(result =>{
+          if(result[0].length){
+            result[0].forEach(product => productsOnDatabase.push(product));
+          }
+          else {
+            reject("There are no products matching product ids on database");
+          }
+          
+          productsOnPacks = result[1];
+    
+          validatedRows = handleProductsNotOnDatabase(validatedRows, productsOnDatabase);
+    
+          let productsManaged = { productsOnDatabase, productsOnPacks, validatedRows }
+          
+          addPacksToUpdate(productsManaged, db)
+            .then(result =>{
+              resolve(result);
+              //updatePrices(result, db);
+            })
+            .catch(err => reject(err));
+        })
+        .catch(err => reject(err));
+    })
 }
 
 function prepareProductCodesForSelectIn (rows){
@@ -292,7 +295,6 @@ function updatePrices(productsManaged, db){
       .then(result =>{
         console.log(`${result.length} products updated`);
         db.disconnect;
-        process.exit();
       })
       .catch(err => console.log(err));
 }
